@@ -69,7 +69,8 @@ splitter -i letters.png -c 1
 
 ## Limitations
 
-- Currently, splitting is strictly based on transparency; other criteria (e.g., color-based separation) are not yet implemented.  
+- File names are always numbered from 0 to N, with no way to add a prefix or a suffix string. Will most likely get implemented very soon.
+- Currently, splitting is strictly based on transparency; other criteria (e.g., color-based separation) are not yet implemented.
 - Error handling for unsupported or corrupt PNG files is minimal.
 
 These limitations may be addressed in future updates.  
