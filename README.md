@@ -59,7 +59,6 @@ splitter -i letters.png -c 1
 ```
 ![image](https://github.com/user-attachments/assets/62ae6e8a-e330-4f83-8712-7d0699b690c2)
 
----
 
 #### Custom background color
 `-b3 <R> <G> <B>`\
@@ -71,6 +70,8 @@ Example:
 ```bash
 splitter -i image.png -b3 255 0 255
 ```
+
+---
 
 ## Notes
 - Indices for `-c` are 0-based and refer to the order in which objects are detected.
