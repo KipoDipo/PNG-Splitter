@@ -13,11 +13,11 @@ int findIndexOfElement(const std::vector<int>& vector, int element)
 	return -1;
 }
 
-void Split(const std::string& input, const std::string& outputFolder = "", std::vector<int> combinedIndexes = {})
+void Split(const std::string& input, const std::string& outputFolder = "", std::vector<int> combinedIndexes = {}, Color backgroundColor = {})
 {
-	if (!std::filesystem::exists(outputFolder)) 
+	if (!std::filesystem::exists(outputFolder))
 	{
-		if (!std::filesystem::create_directory(outputFolder)) 
+		if (!std::filesystem::create_directory(outputFolder))
 		{
 			std::cerr << "Failed to create folder: " << outputFolder << std::endl;
 			return;
@@ -25,6 +25,8 @@ void Split(const std::string& input, const std::string& outputFolder = "", std::
 	}
 
 	Image image(input);
+
+	bool hasCustomBackground = (backgroundColor != Color{});
 
 	int start = -1;
 	int end = -1;
@@ -41,7 +43,8 @@ void Split(const std::string& input, const std::string& outputFolder = "", std::
 
 		for (int y = 0; y < image.getHeight(); y++)
 		{
-			if (image.GetPixel(x, y).a != 0)
+			if (!hasCustomBackground && image.GetPixel(x, y).a != 0 || 
+				hasCustomBackground && image.GetPixel(x, y) != backgroundColor)
 			{
 				isStraightTransparentLine = false;
 
@@ -99,6 +102,7 @@ int main(int argc, char* argv[])
 	std::vector<int> combinedIndexes;
 	std::string outDir = "out/";
 	std::string input = argc == 2 ? argv[1] : "";
+	Color backgroundColor = {};
 
 	for (int i = 1; i < argc - 1; i++)
 	{
@@ -118,15 +122,62 @@ int main(int argc, char* argv[])
 		}
 		else if (strcmp(argv[i], "-c") == 0)
 		{
+			int counter = 0;
 			for (int j = i + 1; j < argc; j++)
 			{
 				if (!isdigit(argv[j][0]))
 					break;
 				// unsafe, but we trust the user!
+				counter++;
 				combinedIndexes.push_back(std::stoi(argv[j]));
 			}
-			i++;
+			i += counter;
 		}
+		else if (strcmp(argv[i], "-b3") == 0)
+		{
+			uint8_t channels[3];
+			for (int j = 0; j < 3; j++)
+			{
+				if (i + 1 + j >= argc)
+				{
+					std::cerr << "Background argument is missing a channel/channels...";
+					return -1;
+				}
+
+				channels[j] = std::stoi(argv[i + 1 + j]);
+			}
+
+			backgroundColor = {
+				channels[0],
+				channels[1],
+				channels[2],
+				255
+			};
+			i += 3;
+		}
+		else if (strcmp(argv[i], "-b4") == 0)
+		{
+			uint8_t channels[4];
+			for (int j = 0; j < 4; j++)
+			{
+				if (i + 1 + j >= argc)
+				{
+					std::cerr << "Background argument is missing a channel/channels...";
+					return -1;
+				}
+
+				channels[j] = std::stoi(argv[i + 1 + j]);
+			}
+
+			backgroundColor = {
+				channels[0],
+				channels[1],
+				channels[2],
+				channels[3],
+			};
+			i += 4;
+		}
+
 	}
 	
 	if (input == "")
@@ -137,7 +188,7 @@ int main(int argc, char* argv[])
 
 	try
 	{
-		Split(input, outDir, combinedIndexes);
+		Split(input, outDir, combinedIndexes, backgroundColor);
 	}
 	catch (const std::exception& e)
 	{

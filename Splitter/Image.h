@@ -23,6 +23,15 @@ struct Color
 		: r(r), g(g), b(b), a(255)
 	{
 	}
+
+	bool operator==(const Color& other) const
+	{
+		return r == other.r && g == other.g && b == other.b && a == other.a;
+	}
+	bool operator !=(const Color& other) const
+	{
+		return !operator==(other);
+	}
 };
 
 class Image
@@ -89,7 +98,7 @@ public:
 	const Color& GetPixel(int x, int y) const
 	{
 		int pos = (width * y + x) * channels;
-		return Color(data[pos + 0], data[pos + 1], data[pos + 2], data[pos + 3]);
+		return Color(data[pos + 0], data[pos + 1], data[pos + 2], (channels == 3) ? 255 : data[pos + 3]);
 	}
 
 	void SetPixel(int x, int y, const Color& color) const
@@ -98,6 +107,7 @@ public:
 		data[pos + 0] = color.r;
 		data[pos + 1] = color.g;
 		data[pos + 2] = color.b;
-		data[pos + 3] = color.a;
+		if (channels == 4)
+			data[pos + 3] = color.a;
 	}
 };
