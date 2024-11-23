@@ -62,9 +62,9 @@ splitter -i letters.png -c 1
 ---
 
 #### Custom background color
-`-b3 128 128 128`\
-`-b4 200 100 150 100`  
-Separates the objects based on a custom color (`b3` for RGB, `b4` for RGBA).\
+`-b3 <R> <G> <B>`\
+`-b4 <R> <G> <B> <A>`  
+Separates the objects based on a custom color (`b3` for RGB, `b4` for RGBA). The values are 8 bits each, so they go from `0` to `255`.\
 In case your input has a colored background, this argument will separate objects based on that specific color.
 
 Example:
