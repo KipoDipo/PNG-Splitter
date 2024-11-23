@@ -1,6 +1,6 @@
 # Splitter
 
-Splitter is a lightweight tool to split a PNG image (strip) into multiple smaller images, identifying distinct objects separated by transparent pixels. It also allows combining multiple objects when they belong together.
+Splitter is a lightweight tool to split a PNG image (strip) into multiple smaller images by identifying distinct objects. It also allows combining multiple objects when they belong together.
 
 ## Features
 - Automatically splits objects in a PNG file.
@@ -61,16 +61,26 @@ splitter -i letters.png -c 1
 
 ---
 
+#### Custom background color
+`-b3 128 128 128`\
+`-b4 200 100 150 100`  
+Separates the objects based on a custom color (`b3` for RGB, `b4` for RGBA).\
+In case your input has a colored background, this argument will separate objects based on that specific color.
+
+Example:
+```bash
+splitter -i image.png -b3 255 0 255
+```
+
 ## Notes
 - Indices for `-c` are 0-based and refer to the order in which objects are detected.
 - The `-c` option supports multiple index combinations in a single command.
-
+- By default the separation is done by checking solely the alpha channel. Use `-b3` or `-b4` to check with a custom color.
 ---
 
 ## Limitations
 
 - File names are always numbered from 0 to N, with no way to add a prefix or a suffix string. Will most likely get implemented very soon.
-- Currently, splitting is strictly based on transparency; other criteria (e.g., color-based separation) are not yet implemented.
 - Error handling for unsupported or corrupt PNG files is minimal.
 
 These limitations may be addressed in future updates.  
